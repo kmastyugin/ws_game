@@ -107,4 +107,4 @@ websocket.on('connection', (ws) => {
     }
 })
 
-server.listen(3000, () => console.log('Сервер запущен на порту 3000'))
+server.listen(5052, () => console.log('Сервер запущен на порту 5052'))

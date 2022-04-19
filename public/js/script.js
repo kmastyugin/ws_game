@@ -1,6 +1,6 @@
 'use strict'
 
-const socket = io.connect('http://localhost:3000')
+const socket = io.connect('http://37.77.104.246:5052/')
 let player, game
 
 const nameFitler = (name) => {
@@ -15,11 +15,6 @@ const nameFitler = (name) => {
 }
 
 pick.addEventListener('click', e => {
-    const name = nameFitler(document.querySelector('#user-name').value)
-    const color = document.querySelector('#color-field').value
-
-    document.querySelector('#color-picker').remove()
-
     if(localStorage.getItem('lose')) {
         if(!localStorage.getItem('count'))
             localStorage.setItem('count', 30)
@@ -38,7 +33,14 @@ pick.addEventListener('click', e => {
                 window.location.reload()
             }
         }, 1000)
+        
+        return
     }
+
+    const name = nameFitler(document.querySelector('#user-name').value)
+    const color = document.querySelector('#color-field').value
+
+    document.querySelector('#color-picker').remove()
 
     player = new Player(name, color)
     game = new Game(60, 10, 10)
