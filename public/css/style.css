@@ -1,0 +1,43 @@
+body {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+#fields {
+    display: flex;
+    width: 500px;
+    justify-content: space-between;
+}
+
+#color-picker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+}
+
+#pick {
+    margin-top: 20px;
+}
+
+table {
+	border: none;
+	margin-bottom: 20px;
+	border-spacing: 0px;
+    border-collapse: collapse;
+}
+
+#game td {
+    border: 1px solid;
+    width: 60px;
+    height: 60px;
+    max-width: 60px;
+    max-height: 60px;
+    overflow: hidden;
+    word-wrap: break-word;
+}
