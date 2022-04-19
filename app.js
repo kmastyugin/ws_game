@@ -1,13 +1,13 @@
 const express = require('express')
 const app = express()
-const server = require('http').Server(app)
-const websocket = require('socket.io')(server)
+const server = require('http').Server(app) // Создание HTTP-сервера, который принимает объект express
+const websocket = require('socket.io')(server) // Создание websocket-сервера, который принимает объект HTTP-сервера
 
+// Пакеты для работы с директориями
 const path = require('path')
 const fs = require('fs')
 
-// Публичная папка
-app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.static(path.join(__dirname, 'public'))) // Публичная папка
 
 // Главный маршрут
 app.get('/', (req, res) => {
@@ -16,34 +16,27 @@ app.get('/', (req, res) => {
 
 //ws.broadcast.emit('message', { message: 'привет от сокета' }) // Всем, кроме отправителя
 
-// Массив объектов игроков
-let players = []
-// Массив WebSocket-соединений
-let connections = []
+
+let players = [] // Массив объектов игроков
+let connections = [] // Массив WebSocket-соединений
 
 // Слушатель события подключений
 websocket.on('connection', (ws) => {
-    // Добавляет соединение в массив соединений
-    connections.push(ws)
+    connections.push(ws) // Добавляет соединение в массив соединений
 
     ws.on('move', data => {
         // data - объект игрока с координатами, именем и цветом, который пришел с фронтенда после нажатия на кнопку движения
-        // Добавляем id соединения объекту игрока, чтобы его идентифицировать
-        data.id = ws.id
+        data.id = ws.id // Добавляем id соединения объекту игрока, чтобы его идентифицировать
 
-        // Добавляем игрока в массив игроков
-        addPlayer(data)
+        addPlayer(data) // Добавляем игрока в массив игроков
 
-        // Оповещаем всех пользователей об обновлении игрока
-        websocket.emit('move', players)
+        websocket.emit('move', players) // Оповещаем всех пользователей об обновлении игрока
     })
 
     // Событие отключения пользователя
     ws.on('disconnect', () => {
-        // Удаляет из массива всех соединений отключенного пользователя
-        deleteConnection(ws)
-        // Удаляет из массива игроков отключенного пользователя
-        deletePlayer(ws.id)
+        deleteConnection(ws) // Удаляет из массива всех соединений отключенного пользователя
+        deletePlayer(ws.id) // Удаляет из массива игроков отключенного пользователя
     })
 
     // Событие атаки
@@ -56,23 +49,18 @@ websocket.on('connection', (ws) => {
             data.forEach(point => {
                 // Проверяем, что хотя бы одна точка совпала с точкой любого игрока, id которого не такое же как у атакующего (отправителя данных)
                 if(player.x === point.x && player.y === point.y && player.id !== ws.id) {
-                    // Удаляем убитого игрока
-                    deletePlayer(player.id)
+                    deletePlayer(player.id) // Удаляем убитого игрока
 
                     // Пробегаемся по массиву соединений
                     connections.forEach((connection, index) => {
                         // Если нашли соединение убитого персонажа
                         if(connection.id === player.id) {
-                            // Отправляем событие kill
-                            connection.emit('kill')
-
-                            // Выполняем дисконнект
-                            connection.disconnect()
+                            connection.emit('kill') // Отправляем событие kill
+                            connection.disconnect() // Выполняем дисконнект
                         }
                     })
 
-                    // Отправляем всем пользователям актуальные позиции игроков
-                    websocket.emit('move', players)
+                    websocket.emit('move', players) // Отправляем всем пользователям актуальные позиции игроков
                 }
             })
         })
@@ -107,4 +95,4 @@ websocket.on('connection', (ws) => {
     }
 })
 
-server.listen(5052, () => console.log('Сервер запущен на порту 5052'))
+server.listen(3000, () => console.log('Сервер запущен на порту 3000'))

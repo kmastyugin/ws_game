@@ -1,6 +1,6 @@
 'use strict'
 
-const socket = io.connect('http://37.77.104.246:5052/')
+const socket = io.connect('http://localhost:3000')
 let player, game
 
 const nameFitler = (name) => {
